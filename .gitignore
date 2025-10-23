@@ -1,0 +1,57 @@
+# ============================================
+# 🐍 .gitignore para proyecto Python conversor_ia
+# ============================================
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+ENV/
+.ENV/
+
+# Archivos de configuración de entorno (PyCharm, VSCode)
+.idea/
+.vscode/
+*.code-workspace
+
+# Compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+build/
+dist/
+
+# Logs y archivos temporales
+*.log
+*.tmp
+*.bak
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de Jupyter (por si usas notebooks)
+.ipynb_checkpoints/
+
+# Datos locales (archivos grandes o sensibles)
+data/input/*
+
+
+# Archivos PDF o binarios generados
+*.pdf
+
+# Archivos de entorno o secretos
+.env
+.env.*
+*.key
+*.pem
+*.crt
+
+# Archivos del FileTree u otros generadores
+FileTree_*.txt
+*.tree
+*.structure
