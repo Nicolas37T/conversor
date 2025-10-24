@@ -1,8 +1,8 @@
 import pandas as pd
-from common.extract_titles import extract_titles
+from extract_title.soat import extract_titles
 from common.extract_date import extract_date
-from extract_table.extract_asfi import extract_asfi_table
-from extract_table.extract_soat import extract_table_from_pdf
+
+from extract_table.soat import extract_table_from_pdf
 
 def build_flat_table(df_raw: pd.DataFrame, titles: dict, pdf_file: str, date_str: str) -> list:
     rows = []
@@ -79,11 +79,8 @@ def process_pdf_to_long_format(pdf_path, page_number: int, extractor: str = "SOA
     # Extraer fecha
     fecha_detectada = extract_date(titles, pdf_path.name)
 
-    # Extraer tabla según extractor
-    if extractor.upper() == "ASFI":
-        df_raw = extract_asfi_table(pdf_path, page_number)
-    else:
-        df_raw = extract_table_from_pdf(str(pdf_path), page_number)
+    # Extraer tabla
+    df_raw = extract_table_from_pdf(str(pdf_path), page_number)
 
     # Construir tabla plana
     rows = build_flat_table(df_raw, titles_dict, pdf_path.name, fecha_detectada)

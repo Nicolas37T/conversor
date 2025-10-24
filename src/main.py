@@ -11,12 +11,11 @@ sys.path.append(str(PROJECT_ROOT))
 # ------------------------------------------------------------
 # IMPORTACIONES DE MÓDULOS
 # ------------------------------------------------------------
-from common.extract_name_file import extract_file_name
-from common.process_pdf_to_long_format import process_pdf_to_long_format
+from build_table.soat import process_pdf_to_long_format as process_soat
+from build_table.asfi import process_pdf_to_long_format as process_asfi
 
 # Carpeta donde estarán los PDFs
 INPUT_DIR = PROJECT_ROOT / "data" / "input"
-
 
 # ------------------------------------------------------------
 # FUNCIÓN PARA SELECCIONAR EL PDF
@@ -36,7 +35,6 @@ def choose_pdf(input_dir: Path) -> Path | None:
         if choice.isdigit() and 1 <= int(choice) <= len(pdfs):
             return pdfs[int(choice) - 1]
         print("Entrada inválida, intenta nuevamente.")
-
 
 # ------------------------------------------------------------
 # FUNCIÓN PRINCIPAL
@@ -58,17 +56,26 @@ def main():
         print("Número inválido. Intenta de nuevo.")
 
     # 3️⃣ Elegir extractor
-    extractor = input("➡️ Ingresa extractor (ASFI/SOAT): ").strip().upper()
+    extractor = input("➡️ Ingresa extractor (ASFI / SOAT): ").strip().upper()
 
-    # 4️⃣ Procesar PDF a tabla plana
-    df_final = process_pdf_to_long_format(str(pdf_path), page_number, extractor)
+    # 4️⃣ Procesar según extractor
+    print("\n⚙️ Procesando... por favor espera...\n")
+    if extractor == "SOAT":
+        df_final = process_soat(str(pdf_path), page_number, extractor)
+    elif extractor == "ASFI":
+        df_final = process_asfi(str(pdf_path), page_number, extractor)
+    else:
+        print(f"❌ Extractor '{extractor}' no reconocido. Usa 'ASFI' o 'SOAT'.")
+        return
 
     # 5️⃣ Exportar Excel final
-    output_file = PROJECT_ROOT / "data" / "output" / f"{pdf_path.stem}_page{page_number}_final.xlsx"
-    output_file.parent.mkdir(parents=True, exist_ok=True)
-    df_final.to_excel(output_file, index=False)
-    print(f"\n✅ Excel final generado: {output_file}")
+    output_dir = PROJECT_ROOT / "data" / "output"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
+    output_file = output_dir / f"{pdf_path.stem}_page{page_number}_{extractor}_final.xlsx"
+    df_final.to_excel(output_file, index=False)
+
+    print(f"\n✅ Excel final generado correctamente en:\n   {output_file}")
 
 # ------------------------------------------------------------
 # EJECUCIÓN DIRECTA
